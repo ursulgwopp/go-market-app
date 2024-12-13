@@ -1,0 +1,36 @@
+services:
+  app:
+    build: .
+    ports:
+      - "1334:1334"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_PASSWORD: postgres
+      SECRET_KEY: DAYSOFMADNESS
+      SALT: sdka/13/3f0od,@/2lsdod
+    command: ["./bin/app"]
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: market
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  migrate:
+    image: migrate/migrate
+    command: ["-path", "/schema", "-database", "postgres://postgres:postgres@db:5432/market?sslmode=disable", "up"]
+    volumes:
+      - ./schema:/schema
+    depends_on:
+      db:
+        condition: service_healthy
