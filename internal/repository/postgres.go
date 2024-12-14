@@ -2,7 +2,10 @@ package repository
 
 import (
 	"fmt"
+	"log"
 
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -22,10 +25,27 @@ func NewPostgresDB(cfg Config) (*sqlx.DB, error) {
 		return nil, err
 	}
 
-	err = db.Ping()
+	// Create a new migrate instance
+	driver, err := postgres.WithInstance(db.DB, &postgres.Config{})
 	if err != nil {
-		return nil, err
+		log.Fatalf("Failed to create database driver: %v", err)
 	}
+
+	m, err := migrate.NewWithDatabaseInstance(
+		"/schema",  // Path to migration files
+		"postgres", // Database driver name
+		driver,
+	)
+	if err != nil {
+		log.Fatalf("Failed to create migrate instance: %v", err)
+	}
+
+	// Run migrations
+	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+		log.Fatalf("Failed to apply migrations: %v", err)
+	}
+
+	log.Println("Migrations applied successfully")
 
 	return db, nil
 }
