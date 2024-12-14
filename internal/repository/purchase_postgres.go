@@ -73,7 +73,7 @@ func (r *PurchasePostgres) GetUserPurchases(id int) ([]models.Purchase, error) {
 	purchases := []models.Purchase{}
 	for rows.Next() {
 		purchase := models.Purchase{}
-		if err := rows.Scan(&purchase.Id, &purchase.UserId, &purchase.ProductId, &purchase.Quantity, &purchase.Timestamp, &purchase.Cost); err != nil {
+		if err := rows.Scan(&purchase.Id, &purchase.UserId, &purchase.ProductId, &purchase.Cost, &purchase.Quantity, &purchase.Timestamp); err != nil {
 			return nil, err
 		}
 
@@ -98,7 +98,7 @@ func (r *PurchasePostgres) GetProductPurchases(id int) ([]models.Purchase, error
 	purchases := []models.Purchase{}
 	for rows.Next() {
 		purchase := models.Purchase{}
-		if err := rows.Scan(&purchase.Id, &purchase.UserId, &purchase.ProductId, &purchase.Quantity, &purchase.Timestamp, &purchase.Cost); err != nil {
+		if err := rows.Scan(&purchase.Id, &purchase.UserId, &purchase.ProductId, &purchase.Cost, &purchase.Quantity, &purchase.Timestamp); err != nil {
 			return nil, err
 		}
 

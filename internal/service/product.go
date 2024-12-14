@@ -14,6 +14,10 @@ func NewProductService(repo repository.Product) *ProductService {
 }
 
 func (s *ProductService) AddProduct(ownerId int, req models.ProductRequest) error {
+	if err := validateProduct(req); err != nil {
+		return err
+	}
+
 	return s.repo.AddProduct(ownerId, req)
 }
 
@@ -26,6 +30,10 @@ func (s *ProductService) GetProductByID(productId int) (models.Product, error) {
 }
 
 func (s *ProductService) UpdateProduct(ownerId int, productId int, req models.ProductRequest) error {
+	if err := validateProduct(req); err != nil {
+		return err
+	}
+
 	return s.repo.UpdateProduct(ownerId, productId, req)
 }
 

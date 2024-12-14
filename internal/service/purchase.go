@@ -1,6 +1,8 @@
 package service
 
 import (
+	"errors"
+
 	"github.com/ursulgwopp/go-market-app/internal/models"
 	"github.com/ursulgwopp/go-market-app/internal/repository"
 )
@@ -14,6 +16,10 @@ func NewPurchaseService(repo repository.Purchase) *PurchaseService {
 }
 
 func (s *PurchaseService) MakePurchase(userId int, productId int, quantity int) (int, error) {
+	if quantity < 1 {
+		return -1, errors.New("invalid quantity")
+	}
+
 	return s.repo.MakePurchase(userId, productId, quantity)
 }
 
