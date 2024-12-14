@@ -75,4 +75,4 @@ For any inquiries, please contact:
 
 - Email: ursuldm@gmail.com
 - GitHub: https://github.com/ursulgwopp
-- Telegram: @ursulgwopp
+- Telegram: https://t.me/ursulgwopp
