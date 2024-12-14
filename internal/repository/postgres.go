@@ -32,8 +32,8 @@ func NewPostgresDB(cfg Config) (*sqlx.DB, error) {
 	}
 
 	m, err := migrate.NewWithDatabaseInstance(
-		"./schema", // Path to migration files
-		"postgres", // Database driver name
+		"file://./schema", // Path to migration files
+		"postgres",        // Database driver name
 		driver,
 	)
 	if err != nil {
