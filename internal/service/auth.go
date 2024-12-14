@@ -25,15 +25,36 @@ func NewAuthService(repo repository.Authorization) *AuthService {
 	return &AuthService{repo: repo}
 }
 
-func (s *AuthService) CreateUser(req models.SignUpRequest) (int, error) {
+func (s *AuthService) SignUp(req models.SignUpRequest) (int, error) {
+	if err := validateUsername(req.Username); err != nil {
+		return -1, err
+	}
+
+	if err := validatePassword(req.Password); err != nil {
+		return -1, err
+	}
+
+	if err := validateEmail(req.Email); err != nil {
+		return -1, err
+	}
+
 	req.Password = generatePasswordHash(req.Password)
 
-	return s.repo.CreateUser(req)
+	return s.repo.SignUp(req)
 }
 
 func (s *AuthService) GenerateToken(req models.SignInRequest) (string, error) {
+	exists, err := s.repo.CheckUsernameExists(req.Username)
+	if err != nil {
+		return "", err
+	}
+
+	if !exists {
+		return "", errors.New("username does not exists")
+	}
+
 	req.Password = generatePasswordHash(req.Password)
-	newUser, err := s.repo.GetUser(req)
+	UserId, err := s.repo.SignIn(req)
 	if err != nil {
 		return "", err
 	}
@@ -43,7 +64,7 @@ func (s *AuthService) GenerateToken(req models.SignInRequest) (string, error) {
 			ExpiresAt: time.Now().Add(12 * time.Hour).Unix(),
 			IssuedAt:  time.Now().Unix(),
 		},
-		newUser.Id,
+		UserId,
 	})
 
 	return token.SignedString([]byte(os.Getenv("SECRET_KEY")))

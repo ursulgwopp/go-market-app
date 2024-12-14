@@ -13,9 +13,9 @@ func NewAuthPostgres(db *sqlx.DB) *AuthPostgres {
 	return &AuthPostgres{db: db}
 }
 
-func (r *AuthPostgres) CreateUser(req models.SignUpRequest) (int, error) {
+func (r *AuthPostgres) SignUp(req models.SignUpRequest) (int, error) {
 	var id int
-	query := `INSERT INTO users (username, password, email) VALUES ($1, $2, $3) RETURNING id`
+	query := `INSERT INTO users (username, hash_password, email) VALUES ($1, $2, $3) RETURNING id`
 
 	row := r.db.QueryRow(query, req.Username, req.Password, req.Email)
 	if err := row.Scan(&id); err != nil {
@@ -25,10 +25,10 @@ func (r *AuthPostgres) CreateUser(req models.SignUpRequest) (int, error) {
 	return id, nil
 }
 
-func (r *AuthPostgres) GetUser(req models.SignInRequest) (models.User, error) {
-	var newUser models.User
-	query := `SELECT id FROM users WHERE username = $1 AND password = $2`
-	err := r.db.Get(&newUser, query, req.Username, req.Password)
+func (r *AuthPostgres) SignIn(req models.SignInRequest) (int, error) {
+	var user_id int
+	query := `SELECT id FROM users WHERE username = $1 AND hash_password = $2`
+	err := r.db.Get(&user_id, query, req.Username, req.Password)
 
-	return newUser, err
+	return user_id, err
 }

@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/ursulgwopp/go-market-app/internal/models"
 )
 
 // @Summary MakePurchase
@@ -23,7 +22,7 @@ import (
 // @Failure default {object} Response
 // @Router /api/purchases/{id} [post]
 func (h *Handler) makePurchase(c *gin.Context) {
-	id, err := getUserId(c)
+	userId, err := getUserId(c)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -42,7 +41,7 @@ func (h *Handler) makePurchase(c *gin.Context) {
 		return
 	}
 
-	purchaseId, err := h.services.Purchase.MakePurchase(models.Purchase{UserId: id, ProductId: productId}, quantity)
+	purchaseId, err := h.services.Purchase.MakePurchase(userId, productId, quantity)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

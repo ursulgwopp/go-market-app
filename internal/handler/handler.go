@@ -33,9 +33,15 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	{
 		users := api.Group("/users")
 		{
-			users.GET("/profile", h.getProfile)
-			users.GET("/:id", h.getUserProfile)
+			users.GET("/:id", h.getUserByID)
 			users.GET("/", h.listUsers)
+		}
+
+		profile := api.Group("/profile")
+		{
+			profile.GET("/", h.getProfile)
+			profile.POST("/deposit", h.deposit)
+			profile.DELETE("/delete", h.deleteProfile)
 		}
 
 		products := api.Group("/products")

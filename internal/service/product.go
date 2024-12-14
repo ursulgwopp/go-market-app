@@ -13,22 +13,22 @@ func NewProductService(repo repository.Product) *ProductService {
 	return &ProductService{repo: repo}
 }
 
-func (s *ProductService) AddProduct(product models.ProductRequest) error {
-	return s.repo.AddProduct(product)
+func (s *ProductService) AddProduct(ownerId int, req models.ProductRequest) error {
+	return s.repo.AddProduct(ownerId, req)
 }
 
-func (s *ProductService) GetAllProducts() ([]models.Product, error) {
-	return s.repo.GetAllProducts()
+func (s *ProductService) ListProducts() ([]models.Product, error) {
+	return s.repo.ListProducts()
 }
 
-func (s *ProductService) GetProductByID(id int) (models.Product, error) {
-	return s.repo.GetProductByID(id)
+func (s *ProductService) GetProductByID(productId int) (models.Product, error) {
+	return s.repo.GetProductByID(productId)
 }
 
-func (s *ProductService) UpdateProduct(id int, product models.ProductRequest) error {
-	return s.repo.UpdateProduct(id, product)
+func (s *ProductService) UpdateProduct(ownerId int, productId int, req models.ProductRequest) error {
+	return s.repo.UpdateProduct(ownerId, productId, req)
 }
 
-func (s *ProductService) DeleteProduct(id int) error {
-	return s.repo.DeleteProduct(id)
+func (s *ProductService) DeleteProduct(ownerId int, productId int) error {
+	return s.repo.DeleteProduct(ownerId, productId)
 }

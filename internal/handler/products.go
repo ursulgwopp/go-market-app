@@ -21,6 +21,12 @@ import (
 // @Failure default {object} Response
 // @Router /api/products/ [post]
 func (h *Handler) addProduct(c *gin.Context) {
+	userId, err := getUserId(c)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
 	var input models.ProductRequest
 
 	if err := c.BindJSON(&input); err != nil {
@@ -28,7 +34,7 @@ func (h *Handler) addProduct(c *gin.Context) {
 		return
 	}
 
-	if err := h.services.Product.AddProduct(input); err != nil {
+	if err := h.services.Product.AddProduct(userId, input); err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -51,7 +57,7 @@ func (h *Handler) addProduct(c *gin.Context) {
 // @Failure default {object} Response
 // @Router /api/products/ [get]
 func (h *Handler) listProducts(c *gin.Context) {
-	products, err := h.services.Product.GetAllProducts()
+	products, err := h.services.Product.ListProducts()
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -104,7 +110,13 @@ func (h *Handler) getProduct(c *gin.Context) {
 // @Failure default {object} Response
 // @Router /api/products/{id} [put]
 func (h *Handler) updateProduct(c *gin.Context) {
-	id, err := parseId(c)
+	userId, err := getUserId(c)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	productId, err := parseId(c)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
@@ -117,7 +129,7 @@ func (h *Handler) updateProduct(c *gin.Context) {
 		return
 	}
 
-	if err := h.services.Product.UpdateProduct(id, input); err != nil {
+	if err := h.services.Product.UpdateProduct(userId, productId, input); err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -141,13 +153,19 @@ func (h *Handler) updateProduct(c *gin.Context) {
 // @Failure default {object} Response
 // @Router /api/products/{id} [delete]
 func (h *Handler) deleteProduct(c *gin.Context) {
-	id, err := parseId(c)
+	userId, err := getUserId(c)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	if err := h.services.Product.DeleteProduct(id); err != nil {
+	productId, err := parseId(c)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	if err := h.services.Product.DeleteProduct(userId, productId); err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}

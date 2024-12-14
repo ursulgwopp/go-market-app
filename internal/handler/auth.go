@@ -27,8 +27,21 @@ func (h *Handler) signUp(c *gin.Context) {
 		return
 	}
 
-	id, err := h.services.Authorization.CreateUser(input)
+	id, err := h.services.Authorization.SignUp(input)
 	if err != nil {
+		if err.Error() == "password must contain at least one uppercase letter" ||
+			err.Error() == "password must contain at least one lowercase letter" ||
+			err.Error() == "password must contain at least one digit" ||
+			err.Error() == "password must contain at least one special character" {
+			newErrorResponse(c, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		if err.Error() == "pq: duplicate key value violates unique constraint \"users_username_key\"" {
+			newErrorResponse(c, http.StatusConflict, "username is not unique")
+			return
+		}
+
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -60,6 +73,11 @@ func (h *Handler) signIn(c *gin.Context) {
 
 	token, err := h.services.Authorization.GenerateToken(input)
 	if err != nil {
+		if err.Error() == "username does not exists" {
+			newErrorResponse(c, http.StatusBadRequest, "username does not exists")
+			return
+		}
+
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}

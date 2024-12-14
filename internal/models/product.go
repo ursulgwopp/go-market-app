@@ -6,6 +6,7 @@ type Product struct {
 	Description string `json:"description"`
 	Price       int    `json:"price"`
 	Quantity    int    `json:"quantity"`
+	OwnerId     int    `json:"ownerId" db:"owner_id"`
 }
 
 type ProductRequest struct {

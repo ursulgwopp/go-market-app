@@ -13,6 +13,8 @@ definitions:
         type: integer
       name:
         type: string
+      ownerId:
+        type: integer
       price:
         type: integer
       quantity:
@@ -36,6 +38,8 @@ definitions:
     type: object
   models.Purchase:
     properties:
+      cost:
+        type: integer
       id:
         type: integer
       productId:
@@ -72,10 +76,16 @@ definitions:
     type: object
   models.User:
     properties:
+      balance:
+        type: integer
       email:
         type: string
       id:
         type: integer
+      productList:
+        items:
+          type: integer
+        type: array
       username:
         type: string
     type: object
@@ -286,6 +296,114 @@ paths:
       summary: UpdateProduct
       tags:
       - products
+  /api/profile:
+    get:
+      consumes:
+      - application/json
+      description: Get Your Profile
+      operationId: get-profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: GetProfile
+      tags:
+      - profile
+  /api/profile/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Profile
+      operationId: delete-profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: DeleteProfile
+      tags:
+      - profile
+  /api/profile/deposit:
+    post:
+      consumes:
+      - application/json
+      description: Deposit
+      operationId: deposit
+      parameters:
+      - description: Amount
+        in: query
+        name: amount
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Deposit
+      tags:
+      - profile
   /api/purchases/{id}:
     post:
       consumes:
@@ -454,8 +572,8 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get User Profile
-      operationId: get-user-profile
+      description: Get User By ID
+      operationId: get-user-by-ID
       parameters:
       - description: UserID
         in: path
@@ -487,41 +605,7 @@ paths:
             $ref: '#/definitions/handler.Response'
       security:
       - ApiKeyAuth: []
-      summary: GetUserProfile
-      tags:
-      - users
-  /api/users/profile:
-    get:
-      consumes:
-      - application/json
-      description: Get Your Profile
-      operationId: get-profile
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.User'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/handler.Response'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/handler.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/handler.Response'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/handler.Response'
-      security:
-      - ApiKeyAuth: []
-      summary: GetProfile
+      summary: GetUserByID
       tags:
       - users
   /auth/sign-in:
@@ -604,6 +688,7 @@ paths:
       - auth
 securityDefinitions:
   ApiKeyAuth:
+    description: Type "Bearer" followed by a space and JWT token.
     in: header
     name: Authorization
     type: apiKey
