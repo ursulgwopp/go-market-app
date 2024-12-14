@@ -89,7 +89,7 @@ definitions:
       username:
         type: string
     type: object
-host: localhost:1334
+host: go-market-app-production.up.railway.app
 info:
   contact: {}
   description: API Server for Market Application
