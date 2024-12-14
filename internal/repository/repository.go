@@ -5,14 +5,10 @@ import (
 	"github.com/ursulgwopp/go-market-app/internal/models"
 )
 
-type Helpers interface {
-	CheckUsernameExists(username string) (bool, error)
-	CheckUserExists(userId int) (bool, error)
-}
-
 type Authorization interface {
 	SignUp(req models.SignUpRequest) (int, error)
 	SignIn(req models.SignInRequest) (int, error)
+	CheckUsernameExists(username string) (bool, error)
 }
 
 type User interface {
