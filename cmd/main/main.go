@@ -11,10 +11,10 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"github.com/ursulgwopp/go-market-app"
-	"github.com/ursulgwopp/go-market-app/internal/handler"
-	"github.com/ursulgwopp/go-market-app/internal/repository"
-	"github.com/ursulgwopp/go-market-app/internal/service"
+	"github.com/ursulgwopp/market-api"
+	"github.com/ursulgwopp/market-api/internal/handler"
+	"github.com/ursulgwopp/market-api/internal/repository"
+	"github.com/ursulgwopp/market-api/internal/service"
 )
 
 // @title Market App API

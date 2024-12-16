@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/ursulgwopp/go-market-app/internal/models"
+	"github.com/ursulgwopp/market-api/internal/models"
 )
 
 // @Summary GetProfile

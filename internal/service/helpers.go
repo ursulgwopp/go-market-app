@@ -4,7 +4,7 @@ import (
 	"errors"
 	"regexp"
 
-	"github.com/ursulgwopp/go-market-app/internal/models"
+	"github.com/ursulgwopp/market-api/internal/models"
 )
 
 func validatePassword(password string) error {

@@ -3,7 +3,7 @@ package repository
 import (
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
-	"github.com/ursulgwopp/go-market-app/internal/models"
+	"github.com/ursulgwopp/market-api/internal/models"
 )
 
 type ProfilePostgres struct {

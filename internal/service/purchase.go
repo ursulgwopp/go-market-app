@@ -3,8 +3,8 @@ package service
 import (
 	"errors"
 
-	"github.com/ursulgwopp/go-market-app/internal/models"
-	"github.com/ursulgwopp/go-market-app/internal/repository"
+	"github.com/ursulgwopp/market-api/internal/models"
+	"github.com/ursulgwopp/market-api/internal/repository"
 )
 
 type PurchaseService struct {

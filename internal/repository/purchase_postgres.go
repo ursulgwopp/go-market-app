@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/ursulgwopp/go-market-app/internal/models"
+	"github.com/ursulgwopp/market-api/internal/models"
 )
 
 type PurchasePostgres struct {

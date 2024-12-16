@@ -1,4 +1,4 @@
-module github.com/ursulgwopp/go-market-app
+module github.com/ursulgwopp/market-api
 
 go 1.21.0
 

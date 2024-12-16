@@ -2,12 +2,12 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/ursulgwopp/go-market-app/internal/service"
+	"github.com/ursulgwopp/market-api/internal/service"
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	_ "github.com/ursulgwopp/go-market-app/docs"
+	_ "github.com/ursulgwopp/market-api/docs"
 )
 
 type Handler struct {
